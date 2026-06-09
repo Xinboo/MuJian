@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { ResumeData, SkillLevel } from '../types/resume'
+import { renderResumeHtml } from '../utils/renderResumeHtml'
 
 const props = defineProps<{ data: ResumeData }>()
 const emit = defineEmits<{ save: [] }>()
@@ -13,6 +14,13 @@ watch(() => props.data, () => { isDirty.value = true }, { deep: true })
 function handleSave() {
   emit('save')
   isDirty.value = false
+}
+
+function openPreview() {
+  const html = renderResumeHtml(props.data)
+  const blob = new Blob([html], { type: 'text/html' })
+  const url = URL.createObjectURL(blob)
+  window.open(url, '_blank')
 }
 
 const skillLevels: SkillLevel[] = ['精通', '熟练', '良好', '一般']
@@ -74,7 +82,10 @@ function removeWorkEntry2(i: number) {
 <template>
   <div class="editor-panel">
     <div class="editor-header">
-      <h2>简历编辑</h2>
+      <div class="header-left">
+        <h2>简历编辑</h2>
+        <a class="preview-link" href="#" @click.prevent="openPreview">预览</a>
+      </div>
       <button class="save-btn" :class="{ disabled: !isDirty }" :disabled="!isDirty" @click="handleSave">保存</button>
     </div>
 
@@ -399,6 +410,23 @@ function removeWorkEntry2(i: number) {
   font-size: 16px;
   font-weight: 600;
   color: #333;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.preview-link {
+  font-size: 14px;
+  color: #3498db;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.preview-link:hover {
+  text-decoration: underline;
 }
 
 .save-btn {
