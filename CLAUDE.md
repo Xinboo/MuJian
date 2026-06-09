@@ -4,7 +4,7 @@
 
 ## 项目结构
 
-```
+```text
 src/
   main.ts                          # 入口
   App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽560px）
@@ -52,6 +52,30 @@ npm install
 npm run dev      # http://localhost:5173
 npm run build
 ```
+
+## Docker 构建与部署
+
+- **Dockerfile**：多阶段构建，node:22-alpine 编译 + nginx:alpine 托管静态文件
+- **nginx.conf**：SPA 路由 fallback、gzip 压缩、静态资源缓存
+- **镜像地址**：`xinboo/resume-app`（Docker Hub）
+
+```bash
+docker build -t resume-app .
+docker run -d -p 8080:80 resume-app
+```
+
+## CI/CD
+
+- **GitHub Actions**（`.github/workflows/docker.yml`）：
+  - push master → 构建并推送 `xinboo/resume-app:latest`
+  - push v* tag → 构建版本号镜像 + 自动创建 GitHub Release（含 changelog）
+  - 需要 GitHub Secrets：`DOCKERHUB_USERNAME`、`DOCKERHUB_TOKEN`
+
+## 分支与版本管理
+
+- `master`：主开发分支
+- `release/v*`：版本备份分支
+- Git tag（`v1.0.0` 等）：版本标记，触发 Actions 构建版本号镜像 + Release
 
 ## 注意事项
 
