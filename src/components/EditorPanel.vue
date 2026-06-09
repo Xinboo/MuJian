@@ -202,13 +202,13 @@ function removeWorkEntry2(i: number) {
               </select>
             </div>
             <div class="field">
-              <label>到岗时间</label>
-              <input v-model="data.jobIntention.availability" />
+              <label>求职状态</label>
+              <input v-model="data.jobIntention.jobStatus" />
             </div>
           </div>
           <div class="field">
-            <label>求职状态</label>
-            <input v-model="data.jobIntention.jobStatus" />
+            <label>到岗时间</label>
+            <input v-model="data.jobIntention.availability" />
           </div>
         </div>
       </div>
