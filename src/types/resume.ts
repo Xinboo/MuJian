@@ -64,7 +64,6 @@ export interface SkillEntry {
 
 export interface PersonalWork {
   id: string
-  logo: string
   link: string
   description: string
 }

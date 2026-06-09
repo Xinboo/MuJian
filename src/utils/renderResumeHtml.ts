@@ -153,21 +153,18 @@ export function renderResumeHtml(data: ResumeData): string {
     </tr>`)
 
   const worksEntries = data.personalWorks.map(w => `
-    <tr>
-      <td class="p15">
-        <table cellspacing="0" cellpadding="0" border="0"><tbody>
-          <tr>
-            <td width="52" height="52" rowspan="2" class="companyLogo">
-              <p>${w.logo ? `<img src="${escapeHtml(w.logo)}" alt="" width="48" height="48" />` : ''}<i></i></p>
-            </td>
-            <td valign="top" class="rtbox p_12">${escapeHtml(w.link)}</td>
-          </tr>
-          <tr>
-            <td class="rtbox p_12">${escapeHtml(w.description)}</td>
-          </tr>
-        </tbody></table>
-      </td>
-    </tr>`)
+    <tr><td class="p15">
+      <table cellspacing="0" cellpadding="0" border="0"><tbody>
+        <tr>
+          <td valign="top" class="keys">作品链接：</td>
+          <td valign="top" class="txt1">${escapeHtml(w.link)}</td>
+        </tr>
+        <tr>
+          <td valign="top" class="keys">作品描述：</td>
+          <td valign="top" class="txt1">${escapeHtml(w.description)}</td>
+        </tr>
+      </tbody></table>
+    </td></tr>`)
 
   return `<html>
   <head>
