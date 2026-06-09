@@ -24,8 +24,9 @@ export interface WorkEntry {
   id: string
   logo: string
   company: string
-  duration: string
-  period: string
+  startDate: string
+  endDate: string
+  isCurrentJob: boolean
   role: string
   industry: string
   companySize: string
@@ -36,15 +37,19 @@ export interface WorkEntry {
 export interface ProjectEntry {
   id: string
   name: string
-  period: string
+  startDate: string
+  endDate: string
+  isCurrentProject: boolean
   company: string
   description: string
 }
 
 export interface EducationEntry {
   id: string
+  logo: string
   school: string
-  period: string
+  startDate: string
+  endDate: string
   degree: string
   major: string
 }

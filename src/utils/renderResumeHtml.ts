@@ -8,6 +8,36 @@ function nl2br(str: string): string {
   return escapeHtml(str).replace(/\n/g, '<br />')
 }
 
+function formatPeriod(startDate: string, endDate: string, isCurrentJob: boolean): string {
+  if (!startDate) return ''
+  const [sy, sm] = startDate.split('-').map(Number)
+  const start = `${sy}/${sm}`
+  if (isCurrentJob) return `${start}-至今`
+  if (!endDate) return start
+  const [ey, em] = endDate.split('-').map(Number)
+  return `${start}-${ey}/${em}`
+}
+
+function calcDuration(startDate: string, endDate: string, isCurrentJob: boolean): string {
+  if (!startDate) return ''
+  const [sy, sm] = startDate.split('-').map(Number)
+  let ey: number, em: number
+  if (isCurrentJob || !endDate) {
+    const now = new Date()
+    ey = now.getFullYear()
+    em = now.getMonth() + 1
+  } else {
+    [ey, em] = endDate.split('-').map(Number)
+  }
+  let months = (ey - sy) * 12 + (em - sm)
+  if (months < 0) return ''
+  const years = Math.floor(months / 12)
+  const rem = months % 12
+  if (years > 0 && rem > 0) return `${years}年${rem}个月`
+  if (years > 0) return `${years}年`
+  return `${rem}个月`
+}
+
 function splitToTags(str: string): string {
   return str.split(/\s+/).filter(Boolean).map(s => `<span class="tag">${escapeHtml(s)}&nbsp;</span>`).join('')
 }
@@ -55,9 +85,9 @@ export function renderResumeHtml(data: ResumeData): string {
               <p>${w.logo ? `<img src="${escapeHtml(w.logo)}" alt="" width="48" height="48" />` : ''}<i></i></p>
             </td>
             <td class="phd tb1 p_12">
-              <strong>${escapeHtml(w.company)}</strong><span class="gray">&nbsp;（${escapeHtml(w.duration)}）</span>
+              <strong>${escapeHtml(w.company)}</strong><span class="gray">&nbsp;（${calcDuration(w.startDate, w.endDate, w.isCurrentJob)}）</span>
             </td>
-            <td valign="top" class="time">${escapeHtml(w.period)}</td>
+            <td valign="top" class="time">${formatPeriod(w.startDate, w.endDate, w.isCurrentJob)}</td>
           </tr>
           <tr>
             <td valign="top" class="tb1 p_12" colspan="3"><span>${escapeHtml(w.role)}</span></td>
@@ -86,7 +116,7 @@ export function renderResumeHtml(data: ResumeData): string {
         <table cellspacing="0" cellpadding="0" border="0"><tbody>
           <tr>
             <td class="phd tb1"><strong>${escapeHtml(proj.name)}</strong></td>
-            <td valign="top" class="time">${escapeHtml(proj.period)}</td>
+            <td valign="top" class="time">${formatPeriod(proj.startDate, proj.endDate, proj.isCurrentProject)}</td>
           </tr>
           ${proj.company ? `<tr><td class="tb1" colspan="2">
             <table cellspacing="0" cellpadding="0" border="0"><tbody><tr>
@@ -110,10 +140,10 @@ export function renderResumeHtml(data: ResumeData): string {
         <table cellspacing="0" cellpadding="0" border="0"><tbody>
           <tr>
             <td rowspan="2" class="schHead">
-              <img src="https://img01.51jobcdn.com/im/school/%25E6%25B9%2596%25E5%258D%2597%25E4%25BF%25A1%25E6%2581%25AF%25E8%2581%258C%25E4%25B8%259A%25E6%258A%2580%25E6%259C%25AF%25E5%25AD%25A6%25E9%2599%25A2.jpg" alt="" width="52" height="52" />
+              ${edu.logo ? `<img src="${escapeHtml(edu.logo)}" alt="" width="52" height="52" />` : ''}
             </td>
             <td valign="top" class="rtbox p_12"><strong>${escapeHtml(edu.school)}</strong></td>
-            <td valign="top" class="time schTime">${escapeHtml(edu.period)}</td>
+            <td valign="top" class="time schTime">${formatPeriod(edu.startDate, edu.endDate, false)}</td>
           </tr>
           <tr>
             <td class="rtbox p_12" colspan="2">${escapeHtml(edu.degree)} <span class="p5">|</span> ${escapeHtml(edu.major)}</td>
@@ -125,22 +155,14 @@ export function renderResumeHtml(data: ResumeData): string {
   const worksEntries = data.personalWorks.map(w => `
     <tr><td class="p15">
       <table cellspacing="0" cellpadding="0" border="0"><tbody>
-        <tr><td class="p15">
-          <table cellspacing="0" cellpadding="0" border="0"><tbody>
-            <tr><td class="tb1">
-              <table cellspacing="0" cellpadding="0" border="0"><tbody>
-                <tr>
-                  <td valign="top" class="keys">作品链接：</td>
-                  <td valign="top" class="txt1">${escapeHtml(w.link)}</td>
-                </tr>
-                <tr>
-                  <td valign="top" class="keys">作品描述：</td>
-                  <td valign="top" class="txt1">${escapeHtml(w.description)}</td>
-                </tr>
-              </tbody></table>
-            </td></tr>
-          </tbody></table>
-        </td></tr>
+        <tr>
+          <td valign="top" class="keys">作品链接：</td>
+          <td valign="top" class="txt1">${escapeHtml(w.link)}</td>
+        </tr>
+        <tr>
+          <td valign="top" class="keys">作品描述：</td>
+          <td valign="top" class="txt1">${escapeHtml(w.description)}</td>
+        </tr>
       </tbody></table>
     </td></tr>`)
 

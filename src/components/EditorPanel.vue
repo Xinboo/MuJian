@@ -16,6 +16,8 @@ function handleSave() {
 }
 
 const skillLevels: SkillLevel[] = ['精通', '熟练', '良好', '一般']
+const now = new Date()
+const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
 function toggle(section: string) {
   activeSection.value = activeSection.value === section ? null : section
@@ -23,7 +25,7 @@ function toggle(section: string) {
 
 function addWorkEntry() {
   props.data.workExperience.push({
-    id: crypto.randomUUID(), logo: '', company: '', duration: '', period: '',
+    id: crypto.randomUUID(), logo: '', company: '', startDate: '', endDate: '', isCurrentJob: false,
     role: '', industry: '', companySize: '', companyType: '', description: '',
   })
 }
@@ -34,7 +36,7 @@ function removeWorkEntry(i: number) {
 
 function addProjectEntry() {
   props.data.projectExperience.push({
-    id: crypto.randomUUID(), name: '', period: '', company: '', description: '',
+    id: crypto.randomUUID(), name: '', startDate: '', endDate: '', isCurrentProject: false, company: '', description: '',
   })
 }
 
@@ -44,7 +46,7 @@ function removeProjectEntry(i: number) {
 
 function addEducationEntry() {
   props.data.education.push({
-    id: crypto.randomUUID(), school: '', period: '', degree: '本科', major: '',
+    id: crypto.randomUUID(), logo: '', school: '', startDate: '', endDate: '', degree: '本科', major: '',
   })
 }
 
@@ -220,8 +222,14 @@ function removeWorkEntry2(i: number) {
               <label>公司Logo</label><input v-model="w.logo" placeholder="图片URL" />
             </div>
             <div class="field-row">
-              <div class="field"><label>时间段</label><input v-model="w.period" placeholder="2021/6-至今" /></div>
-              <div class="field"><label>时长</label><input v-model="w.duration" placeholder="3年9个月" /></div>
+              <div class="field"><label>开始时间</label><input type="month" v-model="w.startDate" /></div>
+              <div class="field">
+                <label>结束时间</label>
+                <div class="date-row">
+                  <input type="month" v-model="w.endDate" :disabled="w.isCurrentJob" />
+                  <label v-if="!w.endDate || w.isCurrentJob" class="checkbox-label"><input type="checkbox" v-model="w.isCurrentJob" @change="w.endDate = w.isCurrentJob ? currentMonth : ''" /> 至今</label>
+                </div>
+              </div>
             </div>
             <div class="field-row">
               <div class="field"><label>行业</label><input v-model="w.industry" /></div>
@@ -269,9 +277,18 @@ function removeWorkEntry2(i: number) {
               <span class="entry-label">项目 {{ i + 1 }}</span>
               <button class="del-btn" @click="removeProjectEntry(i)">删除</button>
             </div>
+            <div class="field">
+              <label>项目名称</label><input v-model="proj.name" />
+            </div>
             <div class="field-row">
-              <div class="field"><label>项目名称</label><input v-model="proj.name" /></div>
-              <div class="field"><label>时间段</label><input v-model="proj.period" /></div>
+              <div class="field"><label>开始时间</label><input type="month" v-model="proj.startDate" /></div>
+              <div class="field">
+                <label>结束时间</label>
+                <div class="date-row">
+                  <input type="month" v-model="proj.endDate" :disabled="proj.isCurrentProject" />
+                  <label v-if="!proj.endDate || proj.isCurrentProject" class="checkbox-label"><input type="checkbox" v-model="proj.isCurrentProject" @change="proj.endDate = proj.isCurrentProject ? currentMonth : ''" /> 至今</label>
+                </div>
+              </div>
             </div>
             <div class="field"><label>所属公司</label><input v-model="proj.company" /></div>
             <div class="field">
@@ -295,9 +312,15 @@ function removeWorkEntry2(i: number) {
               <span class="entry-label">学历 {{ i + 1 }}</span>
               <button class="del-btn" @click="removeEducationEntry(i)">删除</button>
             </div>
+            <div class="field">
+              <label>学校</label><input v-model="edu.school" />
+            </div>
+            <div class="field">
+              <label>学校Logo</label><input v-model="edu.logo" placeholder="图片URL" />
+            </div>
             <div class="field-row">
-              <div class="field"><label>学校</label><input v-model="edu.school" /></div>
-              <div class="field"><label>时间段</label><input v-model="edu.period" /></div>
+              <div class="field"><label>开始时间</label><input type="month" v-model="edu.startDate" /></div>
+              <div class="field"><label>结束时间</label><input type="month" v-model="edu.endDate" /></div>
             </div>
             <div class="field-row">
               <div class="field">
@@ -469,6 +492,46 @@ function removeWorkEntry2(i: number) {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 2px rgba(52,152,219,0.12);
+}
+
+.date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-row input[type="month"] {
+  flex: 1;
+  cursor: pointer;
+}
+
+input[type="month"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+input[type="month"] {
+  position: relative;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #555;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
 }
 
 .field textarea {
