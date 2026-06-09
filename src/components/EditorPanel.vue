@@ -63,7 +63,7 @@ function removeSkillEntry(i: number) {
 }
 
 function addWorkEntry2() {
-  props.data.personalWorks.push({ id: crypto.randomUUID(), link: '', description: '' })
+  props.data.personalWorks.push({ id: crypto.randomUUID(), logo: '', link: '', description: '' })
 }
 
 function removeWorkEntry2(i: number) {
@@ -367,6 +367,7 @@ function removeWorkEntry2(i: number) {
               <span class="entry-label">作品 {{ i + 1 }}</span>
               <button class="del-btn" @click="removeWorkEntry2(i)">删除</button>
             </div>
+            <div class="field"><label>Logo</label><input v-model="w.logo" placeholder="图片URL" /></div>
             <div class="field"><label>链接</label><input v-model="w.link" placeholder="https://" /></div>
             <div class="field"><label>描述</label><input v-model="w.description" /></div>
           </div>
@@ -402,7 +403,7 @@ function removeWorkEntry2(i: number) {
 
 .save-btn {
   padding: 4px 16px;
-  font-size: 12px;
+  font-size: 14px;
   color: #fff;
   background: #3498db;
   border: 1px solid #3498db;

@@ -153,18 +153,21 @@ export function renderResumeHtml(data: ResumeData): string {
     </tr>`)
 
   const worksEntries = data.personalWorks.map(w => `
-    <tr><td class="p15">
-      <table cellspacing="0" cellpadding="0" border="0"><tbody>
-        <tr>
-          <td valign="top" class="keys">作品链接：</td>
-          <td valign="top" class="txt1">${escapeHtml(w.link)}</td>
-        </tr>
-        <tr>
-          <td valign="top" class="keys">作品描述：</td>
-          <td valign="top" class="txt1">${escapeHtml(w.description)}</td>
-        </tr>
-      </tbody></table>
-    </td></tr>`)
+    <tr>
+      <td class="p15">
+        <table cellspacing="0" cellpadding="0" border="0"><tbody>
+          <tr>
+            <td width="52" height="52" rowspan="2" class="companyLogo">
+              <p>${w.logo ? `<img src="${escapeHtml(w.logo)}" alt="" width="48" height="48" />` : ''}<i></i></p>
+            </td>
+            <td valign="top" class="rtbox p_12">${escapeHtml(w.link)}</td>
+          </tr>
+          <tr>
+            <td class="rtbox p_12">${escapeHtml(w.description)}</td>
+          </tr>
+        </tbody></table>
+      </td>
+    </tr>`)
 
   return `<html>
   <head>
@@ -374,7 +377,7 @@ export function renderResumeHtml(data: ResumeData): string {
       </tbody></table>
       <!--技能特长-->
       <table cellspacing="0" cellpadding="0" border="0" class="box"><tbody>
-        <tr><td class="plate1">技能特长 <span class="f12">（包含IT技能、语言能力、证书、成绩、培训经历）</span></td></tr>
+        <tr><td class="plate1">技能特长</td></tr>
         <tr><td class="tbb">
           <table cellspacing="0" cellpadding="0" border="0"><tbody>
             <tr><td class="tit">技能/语言</td></tr>
