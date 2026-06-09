@@ -640,23 +640,36 @@ input[type="month"] {
 
 .skill-input {
   flex: 1;
-  padding: 5px 8px;
+  padding: 6px 10px;
   font-size: 13px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  color: #333;
+  background: #fff;
+  font-family: inherit;
 }
 
 .skill-input:focus {
   outline: none;
   border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52,152,219,0.12);
 }
 
 .skill-select {
   width: 72px;
-  padding: 5px 4px;
+  padding: 6px 4px;
   font-size: 13px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  color: #333;
+  background: #fff;
+  font-family: inherit;
+}
+
+.skill-select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52,152,219,0.12);
 }
 
 .del-btn-sm {
