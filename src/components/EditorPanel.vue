@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import type { ResumeData, SkillLevel } from '../types/resume'
 import { renderResumeHtml } from '../utils/renderResumeHtml'
 
@@ -8,8 +8,82 @@ const emit = defineEmits<{ save: [] }>()
 
 const activeSection = ref<string | null>(null)
 const isDirty = ref(false)
+const showMenu = ref(false)
+const menuRef = ref<HTMLElement | null>(null)
+const fileInputRef = ref<HTMLInputElement | null>(null)
 
 watch(() => props.data, () => { isDirty.value = true }, { deep: true })
+
+function onClickOutside(e: MouseEvent) {
+  if (menuRef.value && !menuRef.value.contains(e.target as Node)) {
+    showMenu.value = false
+  }
+}
+
+onMounted(() => document.addEventListener('click', onClickOutside))
+onUnmounted(() => document.removeEventListener('click', onClickOutside))
+
+function getFileName(ext: string) {
+  const name = props.data.personalInfo.name || '简历'
+  const date = new Date().toISOString().slice(0, 10)
+  return `简历-${name}-${date}.${ext}`
+}
+
+function downloadBlob(blob: Blob, filename: string) {
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
+
+function exportJson() {
+  const raw = localStorage.getItem('resume-data')
+  if (!raw) { alert('没有可导出的数据'); return }
+  downloadBlob(new Blob([raw], { type: 'application/json' }), getFileName('json'))
+  showMenu.value = false
+}
+
+function importJson() {
+  fileInputRef.value?.click()
+  showMenu.value = false
+}
+
+function onFileSelected(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = () => {
+    try {
+      JSON.parse(reader.result as string)
+      localStorage.setItem('resume-data', reader.result as string)
+      location.reload()
+    } catch {
+      alert('JSON 文件格式无效')
+    }
+  }
+  reader.readAsText(file)
+  ;(e.target as HTMLInputElement).value = ''
+}
+
+function exportHtml() {
+  const html = renderResumeHtml(props.data)
+  downloadBlob(new Blob([html], { type: 'text/html' }), getFileName('html'))
+  showMenu.value = false
+}
+
+function exportPdf() {
+  const html = renderResumeHtml(props.data)
+  const iframe = document.createElement('iframe')
+  iframe.style.position = 'fixed'
+  iframe.style.left = '-9999px'
+  document.body.appendChild(iframe)
+  iframe.contentDocument!.write(html)
+  iframe.contentDocument!.close()
+  iframe.contentWindow!.onafterprint = () => document.body.removeChild(iframe)
+  setTimeout(() => iframe.contentWindow!.print(), 300)
+  showMenu.value = false
+}
 
 function handleSave() {
   emit('save')
@@ -86,7 +160,19 @@ function removeWorkEntry2(i: number) {
         <h2>简历编辑</h2>
         <a class="preview-link" href="#" @click.prevent="openPreview">预览</a>
       </div>
-      <button class="save-btn" :class="{ disabled: !isDirty }" :disabled="!isDirty" @click="handleSave">保存</button>
+      <div class="header-right">
+        <button class="save-btn" :class="{ disabled: !isDirty }" :disabled="!isDirty" @click="handleSave">保存</button>
+        <div class="menu-wrapper" ref="menuRef">
+          <button class="menu-btn" @click.stop="showMenu = !showMenu">操作 ▾</button>
+          <div v-show="showMenu" class="menu-dropdown">
+            <div class="menu-item" @click="exportJson">导出 JSON</div>
+            <div class="menu-item" @click="importJson">导入 JSON</div>
+            <div class="menu-item" @click="exportHtml">导出 HTML</div>
+            <div class="menu-item" @click="exportPdf">导出 PDF</div>
+          </div>
+        </div>
+        <input ref="fileInputRef" type="file" accept=".json" style="display:none" @change="onFileSelected" />
+      </div>
     </div>
 
     <div class="sections">
@@ -434,6 +520,12 @@ function removeWorkEntry2(i: number) {
   text-decoration: underline;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .save-btn {
   padding: 4px 16px;
   font-size: 14px;
@@ -452,6 +544,51 @@ function removeWorkEntry2(i: number) {
   background: #ccc;
   border-color: #ccc;
   cursor: not-allowed;
+}
+
+.menu-wrapper {
+  position: relative;
+}
+
+.menu-btn {
+  padding: 4px 12px;
+  font-size: 14px;
+  color: #3498db;
+  background: #fff;
+  border: 1px solid #3498db;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background: #f0f7fd;
+}
+
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 4px;
+  min-width: 120px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.menu-item {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-item:hover {
+  background: #f0f7fd;
+  color: #3498db;
 }
 
 
