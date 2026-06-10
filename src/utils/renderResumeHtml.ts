@@ -179,7 +179,8 @@ export function renderResumeHtml(data: ResumeData): string {
   <body>
     <style>
       html, body, div, p { margin: 0; padding: 0; }
-      body { font-size: 14px; font-family: "microsoft yahei"; background-color: #ffffff; }
+      body { font-size: 14px; font-family: "microsoft yahei"; background-color: #5F6368; }
+      @media print { body { background-color: #fff !important; } }
       table { border-collapse: collapse; border-spacing: 0; table-layout: fixed; }
       th, td { font-size: 14px; padding: 0; }
       a { text-decoration: none; }
