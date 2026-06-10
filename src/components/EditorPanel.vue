@@ -914,7 +914,7 @@ input[type="month"] {
 .donate-modal {
   background: #fff;
   border-radius: 10px;
-  padding: 28px 36px;
+  padding: 28px 84px;
   text-align: center;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
@@ -928,7 +928,7 @@ input[type="month"] {
 
 .donate-qr-row {
   display: flex;
-  gap: 24px;
+  gap: 46px;
   justify-content: center;
   margin-bottom: 12px;
 }
@@ -940,9 +940,8 @@ input[type="month"] {
 .donate-qr {
   width: 220px;
   height: 220px;
-  background: #f5f5f5;
-  border: 1px dashed #ccc;
   border-radius: 8px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
