@@ -7,7 +7,7 @@
 ```text
 src/
   main.ts                          # 入口
-  App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽560px）
+  App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽420px）
   assets/main.css                  # 全局样式重置
   types/resume.ts                  # 所有 TypeScript 接口（ResumeData 为根类型）
   data/defaultResume.ts            # 空白简历模板（所有字段为空）
@@ -27,7 +27,8 @@ src/
 - **新标签页预览**：EditorPanel 中的"预览"链接通过 Blob URL 在新标签页打开完整简历
 - **持久化**：仅 `useResumeStore.ts` 操作 localStorage，用户点「保存」按钮才写入，非自动保存
 - **编辑状态**：保存按钮有 dirty 状态，保存后灰掉，编辑后亮起
-- **不做兼容性处理**：开发阶段，localStorage 不兼容就清掉，不写迁移代码
+- **数据合并**：`useResumeStore.ts` 加载旧数据时通过 `mergeWithDefaults()` 与默认值合并，新增字段自动补全
+- **导入导出**：EditorPanel 操作菜单支持导出/导入 JSON、导出 HTML、导出 PDF（window.print）、重置数据
 
 ## 数据流
 
@@ -42,6 +43,7 @@ src/
 - **教育经历**：同样使用月份选择器，但没有"至今"选项
 - **空格分割渲染**：`targetPositions`、`targetCities`、`industry` 存储为 `string`，渲染时通过 `splitToTags()` 按空格切割为 `<span class="tag">`
 - **项目经验所属公司**：下拉框，选项来自工作经验中的公司名 + "无"
+- **头像**：默认使用 `public/default-avatar.png`，编辑器可自定义 URL 或 base64
 - **公司/学校 Logo**：手填 URL 输入框，支持 base64
 - **技能特长**：技能名不加粗（`<span>` 非 `<strong>`），行间距 `padding: 3px 0`
 
@@ -80,7 +82,11 @@ docker run -d -p 8080:80 resume-app
 ## 注意事项
 
 - 不要修改 `renderResumeHtml.ts` 中的 CSS 和 HTML 结构，除非模板本身需要更新
-- 头像引用外部CDN图片
 - `targetPositions`、`targetCities`、`industry` 是 `string`，按空格分隔，渲染时切割为标签
 - 技能等级对应 CSS 类：精通（无类名 100%）、熟练（`sl` 70%）、良好（`lh` 45%）、一般（`yb` 20%）
 - 编辑器字段顺序应与简历模板渲染顺序保持一致
+
+## 快捷约定
+
+- 用户说"**提交**" = `git commit`，不推送
+- 需要推送时用户会明确说"推送"或"push"
