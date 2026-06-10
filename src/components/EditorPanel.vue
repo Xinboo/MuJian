@@ -192,10 +192,6 @@ function removeWorkEntry2(i: number) {
           <span class="arrow">›</span>
         </div>
         <div v-show="activeSection === 'personalInfo'" class="section-body">
-          <div class="field">
-            <label>头像</label>
-            <input v-model="data.personalInfo.avatar" placeholder="url / base64" />
-          </div>
           <div class="field-row">
             <div class="field">
               <label>姓名</label>
@@ -248,6 +244,10 @@ function removeWorkEntry2(i: number) {
           <div class="field">
             <label>现居城市</label>
             <input v-model="data.personalInfo.currentCity" />
+          </div>
+          <div class="field">
+            <label>头像</label>
+            <input v-model="data.personalInfo.avatar" placeholder="url / base64" />
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import type { ResumeData } from '../types/resume'
 export function getDefaultResume(): ResumeData {
   return {
     personalInfo: {
-      avatar: '/default-avatar.png',
+      avatar: '',
       name: '',
       gender: '男',
       birthYear: 2000,
