@@ -492,7 +492,7 @@ function removeWorkEntry2(i: number) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 16px 8%;
   border-bottom: 1px solid #e8e8e8;
   flex-shrink: 0;
 }
@@ -605,7 +605,7 @@ function removeWorkEntry2(i: number) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+  padding: 12px 8%;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
