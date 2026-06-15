@@ -2,7 +2,7 @@
 
 在线免费制作简历。左侧编辑、右侧实时预览，数据保存在浏览器本地，隐私安全。
 
-🌐 **在线使用**：[resume.xinboo.com](https://resume.xinboo.com)
+🌐 **在线使用**：[resume.xinboo.net](https://resume.xinboo.net)
 
 基于 Vue3 + TypeScript + Vite 构建，无 UI 库、无路由、无状态管理库依赖。
 
