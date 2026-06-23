@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import type { ResumeData } from '../types/resume'
 import { getDefaultResume } from '../data/defaultResume'
 
@@ -26,10 +26,15 @@ function mergeWithDefaults(stored: ResumeData): ResumeData {
 
 const stored = loadFromStorage()
 const resumeData = reactive<ResumeData>(stored ? mergeWithDefaults(stored) : getDefaultResume())
+const dataVersion = ref(0)
+const isDirty = ref(false)
 
 export function useResumeStore() {
   function saveToStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData))
   }
-  return { resumeData, saveToStorage }
+  function bumpVersion() {
+    dataVersion.value++
+  }
+  return { resumeData, saveToStorage, dataVersion, bumpVersion, isDirty }
 }

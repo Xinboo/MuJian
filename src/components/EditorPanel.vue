@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import type { ResumeData, SkillLevel } from '../types/resume'
 import { renderResumeHtml } from '../utils/renderResumeHtml'
+import { useResumeStore } from '../composables/useResumeStore'
+import DebouncedTextarea from './DebouncedTextarea.vue'
+
+const { bumpVersion, isDirty } = useResumeStore()
 
 const props = defineProps<{ data: ResumeData }>()
 const emit = defineEmits<{ save: [] }>()
 
 const activeSection = ref<string | null>(null)
-const isDirty = ref(false)
 const showMenu = ref(false)
 const menuRef = ref<HTMLElement | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null)
 
-watch(() => props.data, () => { isDirty.value = true }, { deep: true })
+function onDataChange() {
+  isDirty.value = true
+  bumpVersion()
+}
 
 function onClickOutside(e: MouseEvent) {
   if (menuRef.value && !menuRef.value.contains(e.target as Node)) {
@@ -119,46 +125,56 @@ function addWorkEntry() {
     id: crypto.randomUUID(), logo: '', company: '', startDate: '', endDate: '', isCurrentJob: false,
     role: '', industry: '', companySize: '', companyType: '', description: '',
   })
+  onDataChange()
 }
 
 function removeWorkEntry(i: number) {
   props.data.workExperience.splice(i, 1)
+  onDataChange()
 }
 
 function addProjectEntry() {
   props.data.projectExperience.push({
     id: crypto.randomUUID(), name: '', startDate: '', endDate: '', isCurrentProject: false, company: '', link: '', techStack: '', description: '', responsibility: '', achievement: '',
   })
+  onDataChange()
 }
 
 function removeProjectEntry(i: number) {
   props.data.projectExperience.splice(i, 1)
+  onDataChange()
 }
 
 function addEducationEntry() {
   props.data.education.push({
     id: crypto.randomUUID(), logo: '', school: '', startDate: '', endDate: '', degree: '本科', major: '',
   })
+  onDataChange()
 }
 
 function removeEducationEntry(i: number) {
   props.data.education.splice(i, 1)
+  onDataChange()
 }
 
 function addSkillEntry() {
   props.data.skills.push({ id: crypto.randomUUID(), name: '', level: '熟练' })
+  onDataChange()
 }
 
 function removeSkillEntry(i: number) {
   props.data.skills.splice(i, 1)
+  onDataChange()
 }
 
 function addWorkEntry2() {
   props.data.personalWorks.push({ id: crypto.randomUUID(), link: '', description: '' })
+  onDataChange()
 }
 
 function removeWorkEntry2(i: number) {
   props.data.personalWorks.splice(i, 1)
+  onDataChange()
 }
 
 const showDonate = ref(false)
@@ -187,14 +203,14 @@ const showDonate = ref(false)
       </div>
     </div>
 
-    <div class="sections">
+    <div class="sections" @input="onDataChange" @change="onDataChange">
       <!-- 个人信息 -->
       <div class="section" :class="{ open: activeSection === 'personalInfo' }">
         <div class="section-title" @click="toggle('personalInfo')">
           <span>基本信息</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'personalInfo'" class="section-body">
+        <div v-if="activeSection === 'personalInfo'" class="section-body">
           <div class="field-row">
             <div class="field">
               <label>姓名</label>
@@ -261,10 +277,10 @@ const showDonate = ref(false)
           <span>个人优势</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'strengths'" class="section-body">
+        <div v-if="activeSection === 'strengths'" class="section-body">
           <div class="field">
             <label>个人优势</label>
-            <textarea v-model="data.strengths" class="auto-height"></textarea>
+            <DebouncedTextarea v-model="data.strengths" class="auto-height" />
           </div>
         </div>
       </div>
@@ -275,7 +291,7 @@ const showDonate = ref(false)
           <span>求职意向</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'jobIntention'" class="section-body">
+        <div v-if="activeSection === 'jobIntention'" class="section-body">
           <div class="field-row">
             <div class="field">
               <label>期望职位</label>
@@ -321,7 +337,7 @@ const showDonate = ref(false)
           <span>工作经验</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'workExperience'" class="section-body">
+        <div v-if="activeSection === 'workExperience'" class="section-body">
           <div v-for="(w, i) in data.workExperience" :key="w.id" class="entry-block">
             <div class="entry-head">
               <span class="entry-label">工作 {{ i + 1 }}</span>
@@ -371,7 +387,7 @@ const showDonate = ref(false)
             </div>
             <div class="field">
               <label>工作描述</label>
-              <textarea v-model="w.description" rows="6"></textarea>
+              <DebouncedTextarea v-model="w.description" rows="6" />
             </div>
           </div>
           <button class="add-btn" @click="addWorkEntry">+ 添加工作经历</button>
@@ -384,7 +400,7 @@ const showDonate = ref(false)
           <span>项目经验</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'projectExperience'" class="section-body">
+        <div v-if="activeSection === 'projectExperience'" class="section-body">
           <div v-for="(proj, i) in data.projectExperience" :key="proj.id" class="entry-block">
             <div class="entry-head">
               <span class="entry-label">项目 {{ i + 1 }}</span>
@@ -413,15 +429,15 @@ const showDonate = ref(false)
             <div class="field"><label>技术架构</label><input v-model="proj.techStack" placeholder="如：Vue3 + TypeScript + Node.js" /></div>
             <div class="field">
               <label>项目描述</label>
-              <textarea v-model="proj.description" rows="8"></textarea>
+              <DebouncedTextarea v-model="proj.description" rows="8" />
             </div>
             <div class="field">
               <label>主要职责</label>
-              <textarea v-model="proj.responsibility" rows="6"></textarea>
+              <DebouncedTextarea v-model="proj.responsibility" rows="6" />
             </div>
             <div class="field">
               <label>项目成果</label>
-              <textarea v-model="proj.achievement" rows="4"></textarea>
+              <DebouncedTextarea v-model="proj.achievement" rows="4" />
             </div>
           </div>
           <button class="add-btn" @click="addProjectEntry">+ 添加项目经历</button>
@@ -434,7 +450,7 @@ const showDonate = ref(false)
           <span>教育经历</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'education'" class="section-body">
+        <div v-if="activeSection === 'education'" class="section-body">
           <div v-for="(edu, i) in data.education" :key="edu.id" class="entry-block">
             <div class="entry-head">
               <span class="entry-label">学历 {{ i + 1 }}</span>
@@ -471,7 +487,7 @@ const showDonate = ref(false)
           <span>技能特长</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'skills'" class="section-body">
+        <div v-if="activeSection === 'skills'" class="section-body">
           <div v-for="(s, i) in data.skills" :key="s.id" class="skill-row">
             <input v-model="s.name" placeholder="技能名称" class="skill-input" />
             <select v-model="s.level" class="skill-select">
@@ -489,7 +505,7 @@ const showDonate = ref(false)
           <span>个人作品</span>
           <span class="arrow">›</span>
         </div>
-        <div v-show="activeSection === 'personalWorks'" class="section-body">
+        <div v-if="activeSection === 'personalWorks'" class="section-body">
           <div v-for="(w, i) in data.personalWorks" :key="w.id" class="entry-block">
             <div class="entry-head">
               <span class="entry-label">作品 {{ i + 1 }}</span>
