@@ -1,4 +1,4 @@
-# mujian
+# MuJian
 
 木简 —— 在线免费制作简历。Vue3 + Vite + TypeScript，无UI库、无路由、无状态管理库。
 
@@ -99,7 +99,6 @@ docker run -d -p 8080:80 mujian
 ## 分支与版本管理
 
 - `master`：主开发分支
-- `release/v*`：版本备份分支
 - Git tag（`v1.0.0` 等）：版本标记，触发 Actions 构建版本号镜像 + Release
 - 当前版本：v1.2.0
 
