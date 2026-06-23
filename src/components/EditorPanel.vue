@@ -25,8 +25,9 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 
 function getFileName(ext: string) {
   const name = props.data.personalInfo.name || '简历'
-  const date = new Date().toISOString().slice(0, 10)
-  return `简历-${name}-${date}.${ext}`
+  const d = new Date()
+  const ts = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}${String(d.getSeconds()).padStart(2, '0')}`
+  return `${name}${ts}.${ext}`
 }
 
 function downloadBlob(blob: Blob, filename: string) {
@@ -126,7 +127,7 @@ function removeWorkEntry(i: number) {
 
 function addProjectEntry() {
   props.data.projectExperience.push({
-    id: crypto.randomUUID(), name: '', startDate: '', endDate: '', isCurrentProject: false, company: '', link: '', techStack: '', description: '',
+    id: crypto.randomUUID(), name: '', startDate: '', endDate: '', isCurrentProject: false, company: '', link: '', techStack: '', description: '', responsibility: '', achievement: '',
   })
 }
 
@@ -413,6 +414,14 @@ const showDonate = ref(false)
             <div class="field">
               <label>项目描述</label>
               <textarea v-model="proj.description" rows="8"></textarea>
+            </div>
+            <div class="field">
+              <label>主要职责</label>
+              <textarea v-model="proj.responsibility" rows="6"></textarea>
+            </div>
+            <div class="field">
+              <label>项目成果</label>
+              <textarea v-model="proj.achievement" rows="4"></textarea>
             </div>
           </div>
           <button class="add-btn" @click="addProjectEntry">+ 添加项目经历</button>

@@ -6,7 +6,7 @@ import EditorPanel from './components/EditorPanel.vue'
 
 const { resumeData, saveToStorage } = useResumeStore()
 
-const editorWidth = ref(420)
+const editorWidth = ref(560)
 const isDragging = ref(false)
 
 function onDragStart(e: MouseEvent) {

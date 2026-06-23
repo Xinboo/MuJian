@@ -143,6 +143,18 @@ export function renderResumeHtml(data: ResumeData): string {
               <td valign="top" class="txt1">${nl2br(proj.description)}</td>
             </tr></tbody></table>
           </td></tr>
+          ${proj.responsibility ? `<tr><td class="tb1" colspan="2">
+            <table cellspacing="0" cellpadding="0" border="0"><tbody><tr>
+              <td valign="top" class="keys">主要职责：</td>
+              <td valign="top" class="txt1">${nl2br(proj.responsibility)}</td>
+            </tr></tbody></table>
+          </td></tr>` : ''}
+          ${proj.achievement ? `<tr><td class="tb1" colspan="2">
+            <table cellspacing="0" cellpadding="0" border="0"><tbody><tr>
+              <td valign="top" class="keys">项目成果：</td>
+              <td valign="top" class="txt1">${nl2br(proj.achievement)}</td>
+            </tr></tbody></table>
+          </td></tr>` : ''}
         </tbody></table>
       </td>
     </tr>`)

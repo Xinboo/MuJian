@@ -45,6 +45,8 @@ export interface ProjectEntry {
   link: string
   techStack: string
   description: string
+  responsibility: string
+  achievement: string
 }
 
 export interface EducationEntry {
