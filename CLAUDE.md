@@ -9,7 +9,7 @@
 ```text
 src/
   main.ts                          # 入口
-  App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽420px）
+  App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽560px）
   assets/main.css                  # 全局样式重置
   types/resume.ts                  # 所有 TypeScript 接口（ResumeData 为根类型）
   data/defaultResume.ts            # 空白简历模板（所有字段为空）
@@ -59,13 +59,16 @@ public/
 - **头像**：默认使用 `public/default-avatar.png`，编辑器可自定义 URL 或 base64
 - **公司/学校 Logo**：手填 URL 输入框，支持 base64
 - **技能特长**：技能名不加粗（`<span>` 非 `<strong>`），行间距 `padding: 3px 0`
-- **编辑器底部**：版本号（v1.1.0）、GitHub 链接、打赏弹窗（微信/支付宝二维码）
+- **项目经验字段**：技术架构、主要职责、项目成果（均为可选，不填则不渲染）
+- **导出文件名**：格式为 `姓名YYYYMMDDHHmmss.ext`
+- **编辑器底部**：版本号（v1.2.0）、GitHub 链接、打赏弹窗（微信/支付宝二维码）
 
-## SEO
+## SEO & 统计
 
-- `index.html` 包含 meta description、keywords、Open Graph 标签
+- `index.html` 包含 meta description、keywords、Open Graph 标签、百度站点验证
 - `public/robots.txt` + `public/sitemap.xml` 配置搜索引擎收录
 - canonical URL: `https://resume.xinboo.net/`
+- 百度统计 JS 已接入（hm.baidu.com）
 
 ## 开发命令
 
@@ -98,7 +101,7 @@ docker run -d -p 8080:80 resume-app
 - `master`：主开发分支
 - `release/v*`：版本备份分支
 - Git tag（`v1.0.0` 等）：版本标记，触发 Actions 构建版本号镜像 + Release
-- 当前版本：v1.1.0
+- 当前版本：v1.2.0
 
 ## 注意事项
 
