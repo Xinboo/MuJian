@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { ResumeData } from '../types/resume'
 import { renderResumeHtml } from '../utils/renderResumeHtml'
 
@@ -19,7 +19,16 @@ function writeToIframe() {
   doc.close()
 }
 
-watch(htmlContent, writeToIframe)
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
+
+watch(htmlContent, () => {
+  if (debounceTimer) clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(writeToIframe, 300)
+})
+
+onUnmounted(() => {
+  if (debounceTimer) clearTimeout(debounceTimer)
+})
 
 onMounted(() => {
   setTimeout(writeToIframe, 50)
