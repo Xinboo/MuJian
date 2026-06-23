@@ -43,6 +43,7 @@ export interface ProjectEntry {
   isCurrentProject: boolean
   company: string
   link: string
+  techStack: string
   description: string
 }
 

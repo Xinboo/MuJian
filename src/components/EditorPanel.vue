@@ -126,7 +126,7 @@ function removeWorkEntry(i: number) {
 
 function addProjectEntry() {
   props.data.projectExperience.push({
-    id: crypto.randomUUID(), name: '', startDate: '', endDate: '', isCurrentProject: false, company: '', link: '', description: '',
+    id: crypto.randomUUID(), name: '', startDate: '', endDate: '', isCurrentProject: false, company: '', link: '', techStack: '', description: '',
   })
 }
 
@@ -409,6 +409,7 @@ const showDonate = ref(false)
               </select>
             </div>
             <div class="field"><label>项目链接</label><input v-model="proj.link" /></div>
+            <div class="field"><label>技术架构</label><input v-model="proj.techStack" placeholder="如：Vue3 + TypeScript + Node.js" /></div>
             <div class="field">
               <label>项目描述</label>
               <textarea v-model="proj.description" rows="8"></textarea>
