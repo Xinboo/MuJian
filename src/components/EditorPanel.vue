@@ -39,9 +39,8 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 function exportJson() {
-  const raw = localStorage.getItem('resume-data')
-  if (!raw) { alert('没有可导出的数据'); return }
-  downloadBlob(new Blob([raw], { type: 'application/json' }), getFileName('json'))
+  const json = JSON.stringify(props.data, null, 2)
+  downloadBlob(new Blob([json], { type: 'application/json' }), getFileName('json'))
   showMenu.value = false
 }
 
@@ -104,6 +103,7 @@ function openPreview() {
   const blob = new Blob([html], { type: 'text/html' })
   const url = URL.createObjectURL(blob)
   window.open(url, '_blank')
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 const skillLevels: SkillLevel[] = ['精通', '熟练', '良好', '一般']
