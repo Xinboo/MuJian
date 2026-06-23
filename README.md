@@ -32,15 +32,15 @@ npm run build
 从 Docker Hub 拉取：
 
 ```bash
-docker pull xinboo/resume-app
-docker run -d -p 8080:80 xinboo/resume-app
+docker pull xinboo/mujian
+docker run -d -p 8080:80 xinboo/mujian
 ```
 
 或本地构建：
 
 ```bash
-docker build -t resume-app .
-docker run -d -p 8080:80 resume-app
+docker build -t mujian .
+docker run -d -p 8080:80 mujian
 ```
 
 访问 http://localhost:8080

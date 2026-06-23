@@ -506,7 +506,7 @@ const showDonate = ref(false)
     <div class="editor-footer">
       <span>v1.1.0</span>
       <span class="dot">·</span>
-      <a href="https://github.com/xinboo/resume-app" target="_blank">GitHub</a>
+      <a href="https://github.com/Xinboo/MuJian" target="_blank">GitHub</a>
       <span class="dot">·</span>
       <a href="#" @click.prevent="showDonate = true">打赏</a>
     </div>

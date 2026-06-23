@@ -1,4 +1,4 @@
-# resume-app
+# mujian
 
 木简 —— 在线免费制作简历。Vue3 + Vite + TypeScript，无UI库、无路由、无状态管理库。
 
@@ -82,17 +82,17 @@ npm run build
 
 - **Dockerfile**：多阶段构建，node:22-alpine 编译 + nginx:alpine 托管静态文件
 - **nginx.conf**：SPA 路由 fallback、gzip 压缩、静态资源缓存
-- **镜像地址**：`xinboo/resume-app`（Docker Hub）
+- **镜像地址**：`xinboo/mujian`（Docker Hub）
 
 ```bash
-docker build -t resume-app .
-docker run -d -p 8080:80 resume-app
+docker build -t mujian .
+docker run -d -p 8080:80 mujian
 ```
 
 ## CI/CD
 
 - **GitHub Actions**（`.github/workflows/docker.yml`）：
-  - push master → 构建并推送 `xinboo/resume-app:latest`
+  - push master → 构建并推送 `xinboo/mujian:latest`
   - push v* tag → 构建版本号镜像 + 自动创建 GitHub Release（含 changelog）
   - 需要 GitHub Secrets：`DOCKERHUB_USERNAME`、`DOCKERHUB_TOKEN`
 
