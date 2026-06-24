@@ -178,7 +178,7 @@ const sections = [
     </div>
 
     <div class="editor-footer">
-      <span>v1.2.0</span>
+      <span>v1.3.0</span>
       <span class="dot">·</span>
       <a href="https://github.com/Xinboo/MuJian" target="_blank">GitHub</a>
       <span class="dot">·</span>

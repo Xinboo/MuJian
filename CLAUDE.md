@@ -111,7 +111,7 @@ docker run -d -p 8080:80 mujian
 
 - `master`：主开发分支
 - Git tag（`v1.0.0` 等）：版本标记，触发 Actions 创建 GitHub Release
-- 当前版本：v1.2.0
+- 当前版本：v1.3.0
 
 ## 注意事项
 
