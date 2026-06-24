@@ -6,7 +6,17 @@ import EditorPanel from './components/EditorPanel.vue'
 
 const { saveToStorage } = useResumeStore()
 
-const editorWidth = ref(628)
+const DEFAULT_EDITOR_WIDTH = 628
+const EDITOR_WIDTH_KEY = 'editor-width'
+
+function loadEditorWidth(): number {
+  const raw = localStorage.getItem(EDITOR_WIDTH_KEY)
+  if (!raw) return DEFAULT_EDITOR_WIDTH
+  const n = Number(raw)
+  return n >= 300 && n <= 800 ? n : DEFAULT_EDITOR_WIDTH
+}
+
+const editorWidth = ref(loadEditorWidth())
 const isDragging = ref(false)
 
 function onDragStart(e: MouseEvent) {
@@ -21,6 +31,7 @@ function onDragStart(e: MouseEvent) {
 
   function onMouseUp() {
     isDragging.value = false
+    localStorage.setItem(EDITOR_WIDTH_KEY, String(editorWidth.value))
     document.removeEventListener('mousemove', onMouseMove)
     document.removeEventListener('mouseup', onMouseUp)
   }
@@ -33,7 +44,7 @@ function onDragStart(e: MouseEvent) {
 </script>
 
 <template>
-  <div class="app-layout" :class="{ dragging: isDragging }">
+  <div class="app-layout">
     <div class="editor-pane" :style="{ width: editorWidth + 'px' }">
       <EditorPanel @save="saveToStorage" />
     </div>
@@ -41,6 +52,7 @@ function onDragStart(e: MouseEvent) {
     <div class="preview-pane">
       <ResumePreview />
     </div>
+    <div v-if="isDragging" class="drag-overlay"></div>
   </div>
 </template>
 
@@ -49,15 +61,6 @@ function onDragStart(e: MouseEvent) {
   display: flex;
   height: 100vh;
   overflow: hidden;
-}
-
-.app-layout.dragging {
-  user-select: none;
-  cursor: col-resize;
-}
-
-.app-layout.dragging :deep(iframe) {
-  pointer-events: none;
 }
 
 .preview-pane {
@@ -74,8 +77,7 @@ function onDragStart(e: MouseEvent) {
   transition: background 0.15s;
 }
 
-.resize-handle:hover,
-.app-layout.dragging .resize-handle {
+.resize-handle:hover {
   background: #3498db;
 }
 
@@ -83,5 +85,16 @@ function onDragStart(e: MouseEvent) {
   flex-shrink: 0;
   overflow: hidden;
   height: 100vh;
+}
+
+.drag-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  cursor: col-resize;
+  user-select: none;
 }
 </style>

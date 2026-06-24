@@ -48,11 +48,11 @@ public/
 - **组件拆分**：EditorPanel 拆为外壳 + 8 个 section 子组件，每个 section 独立渲染，编辑时只重渲染当前 section
 - **数据直连 store**：各 section 和 ResumePreview 直接从 `useResumeStore()` 获取数据，不通过 props 传递
 - **预览机制**：`ResumePreview.vue` 使用双缓冲 iframe（前后台切换），`srcdoc` 异步加载，不闪烁不阻塞主线程。原因：`srcdoc` 赋值会触发 iframe 完整导航（销毁旧文档→重建），单 iframe 会闪白屏，双缓冲让重建在不可见的后台 iframe 完成后再切换。后台 iframe 必须设置 `pointer-events: none`，仅前台 `.front` 设为 `auto`，否则后台 iframe 会干扰滚动等鼠标事件
-- **拖拽分栏**：`App.vue` 中 resize-handle 拖拽调节编辑区/预览区宽度。注意 iframe 的 `pointer-events: none` 必须用 `:deep()` 穿透 scoped 样式，否则拖拽到预览区时 iframe 会捕获鼠标事件导致拖拽中断
+- **拖拽分栏**：`App.vue` 中 resize-handle 拖拽调节编辑区/预览区宽度（默认628px，范围300-800px），拖拽结束自动存入 localStorage（key: `editor-width`）。拖拽期间使用全屏透明遮罩（`drag-overlay`）捕获鼠标事件，避免修改 iframe 的 `pointer-events` 导致滚动失效
 - **版本号驱动预览**：store 维护 `dataVersion` 浅层 ref，编辑时 `bumpVersion()` 递增，预览即时刷新（无防抖）
 - **新标签页预览**：EditorPanel 中的"预览"链接通过 Blob URL 在新标签页打开完整简历
 - **图片绝对路径**：`renderResumeHtml.ts` 中使用 `window.location.origin` 拼接绝对 URL，确保 Blob URL / iframe 上下文中图片正常加载
-- **持久化**：仅 `useResumeStore.ts` 操作 localStorage（key: `resume-data`），用户点「保存」按钮或 Ctrl+S 才写入，非自动保存
+- **持久化**：简历数据通过 `useResumeStore.ts` 操作 localStorage（key: `resume-data`），用户点「保存」按钮或 Ctrl+S 才写入，非自动保存；编辑区宽度通过 `App.vue` 存入 localStorage（key: `editor-width`），拖拽结束自动保存
 - **编辑状态**：保存按钮有 dirty 状态（`isDirty` ref），保存后灰掉，编辑后亮起
 - **数据合并**：`useResumeStore.ts` 加载旧数据时通过 `mergeWithDefaults()` 与默认值合并，新增字段自动补全
 - **导入导出**：EditorPanel 操作菜单支持导出/导入 JSON、导出 HTML、导出 PDF（window.print）、重置数据
