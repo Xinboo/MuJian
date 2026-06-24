@@ -81,10 +81,9 @@ public/
 
 ## SEO & 统计
 
-- `index.html` 包含 meta description、keywords、Open Graph 标签、百度站点验证
+- `index.html` 包含 meta description、keywords、Open Graph 标签
 - `public/robots.txt` + `public/sitemap.xml` 配置搜索引擎收录
 - canonical URL: `https://resume.xinboo.net/`
-- 百度统计 JS 已接入（hm.baidu.com）
 
 ## 开发命令
 
