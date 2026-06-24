@@ -93,7 +93,6 @@ npm run build
 ## Docker 构建与部署
 
 - **Dockerfile**：多阶段构建，node:22-alpine 编译 + static-web-server:2-alpine 托管静态文件
-- **nginx.conf**：保留备用（当前未使用，Dockerfile 已切换为 static-web-server）
 - **镜像地址**：`xinboo/mujian`（Docker Hub）
 
 ```bash
@@ -105,13 +104,13 @@ docker run -d -p 8080:80 mujian
 
 - **GitHub Actions**（`.github/workflows/docker.yml`）：
   - push master → 构建并推送 `xinboo/mujian:latest`
-  - push v* tag → 构建版本号镜像 + 自动创建 GitHub Release（含 changelog）
+  - push v* tag → 自动创建 GitHub Release（含 changelog）
   - 需要 GitHub Secrets：`DOCKERHUB_USERNAME`、`DOCKERHUB_TOKEN`
 
 ## 分支与版本管理
 
 - `master`：主开发分支
-- Git tag（`v1.0.0` 等）：版本标记，触发 Actions 构建版本号镜像 + Release
+- Git tag（`v1.0.0` 等）：版本标记，触发 Actions 创建 GitHub Release
 - 当前版本：v1.2.0
 
 ## 注意事项
