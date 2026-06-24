@@ -9,7 +9,7 @@
 ```text
 src/
   main.ts                          # 入口
-  App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽560px）
+  App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽628px）
   assets/
     main.css                       # 全局样式重置
     editor-fields.css              # 编辑器表单公共样式（所有 section 共享）
