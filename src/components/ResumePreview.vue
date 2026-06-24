@@ -74,8 +74,10 @@ onMounted(() => {
   border: none;
   background: #fff;
   z-index: 0;
+  pointer-events: none;
 }
 .preview-iframe.front {
   z-index: 1;
+  pointer-events: auto;
 }
 </style>
