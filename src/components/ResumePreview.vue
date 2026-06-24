@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { renderResumeHtml } from '../utils/renderResumeHtml'
 import { useResumeStore } from '../composables/useResumeStore'
 
@@ -37,16 +37,7 @@ function updatePreview() {
   hidden.srcdoc = html
 }
 
-let debounceTimer: ReturnType<typeof setTimeout> | null = null
-
-watch(dataVersion, () => {
-  if (debounceTimer) clearTimeout(debounceTimer)
-  debounceTimer = setTimeout(updatePreview, 100)
-})
-
-onUnmounted(() => {
-  if (debounceTimer) clearTimeout(debounceTimer)
-})
+watch(dataVersion, updatePreview)
 
 onMounted(() => {
   const iframe = iframeA.value
