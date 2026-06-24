@@ -47,7 +47,8 @@ public/
 - **模板**：`renderResumeHtml.ts` 包含内置的CSS和table布局，不要随意修改其结构
 - **组件拆分**：EditorPanel 拆为外壳 + 8 个 section 子组件，每个 section 独立渲染，编辑时只重渲染当前 section
 - **数据直连 store**：各 section 和 ResumePreview 直接从 `useResumeStore()` 获取数据，不通过 props 传递
-- **预览机制**：`ResumePreview.vue` 使用双缓冲 iframe（前后台切换），`srcdoc` 异步加载，不闪烁不阻塞主线程
+- **预览机制**：`ResumePreview.vue` 使用双缓冲 iframe（前后台切换），`srcdoc` 异步加载，不闪烁不阻塞主线程。原因：`srcdoc` 赋值会触发 iframe 完整导航（销毁旧文档→重建），单 iframe 会闪白屏，双缓冲让重建在不可见的后台 iframe 完成后再切换
+- **拖拽分栏**：`App.vue` 中 resize-handle 拖拽调节编辑区/预览区宽度。注意 iframe 的 `pointer-events: none` 必须用 `:deep()` 穿透 scoped 样式，否则拖拽到预览区时 iframe 会捕获鼠标事件导致拖拽中断
 - **版本号驱动预览**：store 维护 `dataVersion` 浅层 ref，编辑时 `bumpVersion()` 递增，预览即时刷新（无防抖）
 - **新标签页预览**：EditorPanel 中的"预览"链接通过 Blob URL 在新标签页打开完整简历
 - **图片绝对路径**：`renderResumeHtml.ts` 中使用 `window.location.origin` 拼接绝对 URL，确保 Blob URL / iframe 上下文中图片正常加载

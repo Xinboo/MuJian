@@ -56,7 +56,7 @@ function onDragStart(e: MouseEvent) {
   cursor: col-resize;
 }
 
-.app-layout.dragging iframe {
+.app-layout.dragging :deep(iframe) {
   pointer-events: none;
 }
 
