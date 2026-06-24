@@ -32,15 +32,13 @@ src/
   utils/
     renderResumeHtml.ts            # 内置 HTML 模板（CSS + 表格结构）
 public/
-  logo.ico                         # 网站 favicon
+  favicon.svg                      # 网站 favicon（Vite 默认图标）
   default-avatar.png               # 默认头像
   icon-person.png                  # 性别图标
   icon-phone.png                   # 电话图标
   icon-email.png                   # 邮箱图标
   wechat-qr.jpg                   # 微信收款码
   alipay-qr.jpg                   # 支付宝收款码
-  robots.txt                       # 搜索引擎爬虫规则
-  sitemap.xml                      # 站点地图
 ```
 
 ## 核心架构
@@ -50,7 +48,7 @@ public/
 - **组件拆分**：EditorPanel 拆为外壳 + 8 个 section 子组件，每个 section 独立渲染，编辑时只重渲染当前 section
 - **数据直连 store**：各 section 和 ResumePreview 直接从 `useResumeStore()` 获取数据，不通过 props 传递
 - **预览机制**：`ResumePreview.vue` 使用双缓冲 iframe（前后台切换），`srcdoc` 异步加载，不闪烁不阻塞主线程
-- **版本号驱动预览**：store 维护 `dataVersion` 浅层 ref，编辑时 `bumpVersion()` 递增，预览仅 watch 此版本号（100ms 防抖）
+- **版本号驱动预览**：store 维护 `dataVersion` 浅层 ref，编辑时 `bumpVersion()` 递增，预览即时刷新（无防抖）
 - **新标签页预览**：EditorPanel 中的"预览"链接通过 Blob URL 在新标签页打开完整简历
 - **图片绝对路径**：`renderResumeHtml.ts` 中使用 `window.location.origin` 拼接绝对 URL，确保 Blob URL / iframe 上下文中图片正常加载
 - **持久化**：仅 `useResumeStore.ts` 操作 localStorage（key: `resume-data`），用户点「保存」按钮或 Ctrl+S 才写入，非自动保存
@@ -62,7 +60,7 @@ public/
 
 1. 启动 → 加载空白模板（`defaultResume.ts`）
 2. 读取 localStorage → 有数据则通过 `mergeWithDefaults()` 合并后覆盖，无则保持空白
-3. 编辑 → section 组件直接修改 store 中的 reactive 数据 → `bumpVersion()` → 预览 100ms 防抖后刷新
+3. 编辑 → section 组件直接修改 store 中的 reactive 数据 → `bumpVersion()` → 预览即时刷新
 4. 点保存 / Ctrl+S → 写入 localStorage
 
 ## 关键设计
@@ -79,11 +77,10 @@ public/
 - **编辑器底部**：版本号（v1.2.0）、GitHub 链接、打赏弹窗（微信/支付宝二维码）
 - **快捷键**：Ctrl+S / Cmd+S 保存
 
-## SEO & 统计
+## SEO
 
-- `index.html` 包含 meta description、keywords、Open Graph 标签
-- `public/robots.txt` + `public/sitemap.xml` 配置搜索引擎收录
-- canonical URL: `https://mujian.xinboo.net/`
+- `index.html` 包含 title 和 meta description
+- favicon: `public/favicon.svg`（Vite 默认图标）
 
 ## 开发命令
 

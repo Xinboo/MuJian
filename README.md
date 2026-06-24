@@ -17,7 +17,7 @@
 - 自定义头像（URL / Base64）
 - 公司/学校 Logo 支持 URL 和 Base64
 - 导出 PDF / HTML / JSON，导入 JSON
-- SEO 优化，支持搜索引擎收录
+- Ctrl+S / Cmd+S 快捷保存
 
 ## 快速开始
 
@@ -50,7 +50,7 @@ docker run -d -p 8080:80 mujian
 - Vue 3
 - TypeScript
 - Vite
-- Nginx（Docker 部署）
+- static-web-server（Docker 部署）
 - GitHub Actions（CI/CD）
 
 ## License
