@@ -10,13 +10,25 @@
 src/
   main.ts                          # 入口
   App.vue                          # 主布局：左编辑器 + 拖拽分栏 + 右预览（默认编辑器宽560px）
-  assets/main.css                  # 全局样式重置
+  assets/
+    main.css                       # 全局样式重置
+    editor-fields.css              # 编辑器表单公共样式（所有 section 共享）
   types/resume.ts                  # 所有 TypeScript 接口（ResumeData 为根类型）
   data/defaultResume.ts            # 空白简历模板（所有字段为空）
   composables/useResumeStore.ts    # 状态管理：reactive + localStorage 手动保存
   components/
-    ResumePreview.vue              # iframe 渲染预览
-    EditorPanel.vue                # 左侧手风琴编辑面板（默认全部折叠）
+    ResumePreview.vue              # 双缓冲 iframe 渲染预览（无闪烁）
+    EditorPanel.vue                # 编辑器外壳：header、section 列表、footer
+    DebouncedTextarea.vue          # 防抖 textarea（当前未使用，保留备用）
+    sections/                      # 8 个独立 section 子组件
+      PersonalInfoSection.vue      # 基本信息
+      StrengthsSection.vue         # 个人优势
+      JobIntentionSection.vue      # 求职意向
+      WorkExperienceSection.vue    # 工作经验
+      ProjectExperienceSection.vue # 项目经验
+      EducationSection.vue         # 教育经历
+      SkillsSection.vue            # 技能特长
+      PersonalWorksSection.vue     # 个人作品
   utils/
     renderResumeHtml.ts            # 内置 HTML 模板（CSS + 表格结构）
 public/
@@ -35,11 +47,14 @@ public/
 
 - **数据与模板分离**：`ResumeData`（数据）+ `renderResumeHtml()`（模板）= 完整 HTML
 - **模板**：`renderResumeHtml.ts` 包含内置的CSS和table布局，不要随意修改其结构
-- **预览机制**：`ResumePreview.vue` 通过 `iframe.contentDocument.write()` 渲染，`watch` 监听数据变化自动刷新
+- **组件拆分**：EditorPanel 拆为外壳 + 8 个 section 子组件，每个 section 独立渲染，编辑时只重渲染当前 section
+- **数据直连 store**：各 section 和 ResumePreview 直接从 `useResumeStore()` 获取数据，不通过 props 传递
+- **预览机制**：`ResumePreview.vue` 使用双缓冲 iframe（前后台切换），`srcdoc` 异步加载，不闪烁不阻塞主线程
+- **版本号驱动预览**：store 维护 `dataVersion` 浅层 ref，编辑时 `bumpVersion()` 递增，预览仅 watch 此版本号（100ms 防抖）
 - **新标签页预览**：EditorPanel 中的"预览"链接通过 Blob URL 在新标签页打开完整简历
 - **图片绝对路径**：`renderResumeHtml.ts` 中使用 `window.location.origin` 拼接绝对 URL，确保 Blob URL / iframe 上下文中图片正常加载
-- **持久化**：仅 `useResumeStore.ts` 操作 localStorage（key: `resume-data`），用户点「保存」按钮才写入，非自动保存
-- **编辑状态**：保存按钮有 dirty 状态，保存后灰掉，编辑后亮起
+- **持久化**：仅 `useResumeStore.ts` 操作 localStorage（key: `resume-data`），用户点「保存」按钮或 Ctrl+S 才写入，非自动保存
+- **编辑状态**：保存按钮有 dirty 状态（`isDirty` ref），保存后灰掉，编辑后亮起
 - **数据合并**：`useResumeStore.ts` 加载旧数据时通过 `mergeWithDefaults()` 与默认值合并，新增字段自动补全
 - **导入导出**：EditorPanel 操作菜单支持导出/导入 JSON、导出 HTML、导出 PDF（window.print）、重置数据
 
@@ -47,8 +62,8 @@ public/
 
 1. 启动 → 加载空白模板（`defaultResume.ts`）
 2. 读取 localStorage → 有数据则通过 `mergeWithDefaults()` 合并后覆盖，无则保持空白
-3. 编辑 → 实时更新预览（通过 reactive + watch）
-4. 点保存 → 写入 localStorage
+3. 编辑 → section 组件直接修改 store 中的 reactive 数据 → `bumpVersion()` → 预览 100ms 防抖后刷新
+4. 点保存 / Ctrl+S → 写入 localStorage
 
 ## 关键设计
 
@@ -62,6 +77,7 @@ public/
 - **项目经验字段**：技术架构、主要职责、项目成果（均为可选，不填则不渲染）
 - **导出文件名**：格式为 `姓名YYYYMMDDHHmmss.ext`
 - **编辑器底部**：版本号（v1.2.0）、GitHub 链接、打赏弹窗（微信/支付宝二维码）
+- **快捷键**：Ctrl+S / Cmd+S 保存
 
 ## SEO & 统计
 
@@ -80,8 +96,8 @@ npm run build
 
 ## Docker 构建与部署
 
-- **Dockerfile**：多阶段构建，node:22-alpine 编译 + nginx:alpine 托管静态文件
-- **nginx.conf**：SPA 路由 fallback、gzip 压缩、静态资源缓存
+- **Dockerfile**：多阶段构建，node:22-alpine 编译 + static-web-server:2-alpine 托管静态文件
+- **nginx.conf**：保留备用（当前未使用，Dockerfile 已切换为 static-web-server）
 - **镜像地址**：`xinboo/mujian`（Docker Hub）
 
 ```bash
