@@ -1,0 +1,204 @@
+.section-body {
+  padding: 0 8% 16px;
+}
+
+.field {
+  margin-bottom: 10px;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  background: #fff;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52,152,219,0.12);
+}
+
+.date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-row input[type="month"] {
+  flex: 1;
+  cursor: pointer;
+}
+
+input[type="month"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+input[type="month"] {
+  position: relative;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #555;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.field textarea.auto-height {
+  field-sizing: content;
+  min-height: 200px;
+  padding-bottom: 80px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.entry-block {
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #fafbfc;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+.entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.entry-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.del-btn {
+  padding: 2px 8px;
+  font-size: 12px;
+  color: #e74c3c;
+  background: #fff;
+  border: 1px solid #e74c3c;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.del-btn:hover {
+  background: #fdf0ef;
+}
+
+.add-btn {
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  color: #666;
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.add-btn:hover {
+  background: #eee;
+  color: #333;
+}
+
+.skill-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.skill-input {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  background: #fff;
+  font-family: inherit;
+}
+
+.skill-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52,152,219,0.12);
+}
+
+.skill-select {
+  width: 72px;
+  padding: 6px 4px;
+  font-size: 13px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  background: #fff;
+  font-family: inherit;
+}
+
+.skill-select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52,152,219,0.12);
+}
+
+.del-btn-sm {
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 1;
+  color: #ccc;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.del-btn-sm:hover {
+  color: #e74c3c;
+  background: #fdf0ef;
+}

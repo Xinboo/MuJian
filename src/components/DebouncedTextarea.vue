@@ -20,7 +20,7 @@ function onInput(e: Event) {
   timer = setTimeout(() => {
     emit('update:modelValue', local.value)
     bumpVersion()
-  }, 300)
+  }, 50)
 }
 </script>
 

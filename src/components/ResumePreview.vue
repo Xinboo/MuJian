@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
-import type { ResumeData } from '../types/resume'
 import { renderResumeHtml } from '../utils/renderResumeHtml'
 import { useResumeStore } from '../composables/useResumeStore'
 
-const { dataVersion } = useResumeStore()
-const props = defineProps<{ data: ResumeData }>()
+const { dataVersion, resumeData } = useResumeStore()
 
 const iframeA = ref<HTMLIFrameElement>()
 const iframeB = ref<HTMLIFrameElement>()
@@ -21,7 +19,7 @@ function updatePreview() {
   const vDoc = visible.contentDocument
   scrollTop = vDoc?.documentElement?.scrollTop || vDoc?.body?.scrollTop || 0
 
-  const html = renderResumeHtml(props.data)
+  const html = renderResumeHtml(resumeData)
   const id = ++updateId
 
   hidden.onload = () => {
@@ -43,7 +41,7 @@ let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
 watch(dataVersion, () => {
   if (debounceTimer) clearTimeout(debounceTimer)
-  debounceTimer = setTimeout(updatePreview, 200)
+  debounceTimer = setTimeout(updatePreview, 100)
 })
 
 onUnmounted(() => {
@@ -55,7 +53,7 @@ onMounted(() => {
   if (!iframe) return
   const doc = iframe.contentDocument || iframe.contentWindow?.document
   if (!doc) return
-  const html = renderResumeHtml(props.data)
+  const html = renderResumeHtml(resumeData)
   doc.open()
   doc.write(html)
   doc.close()

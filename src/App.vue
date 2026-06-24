@@ -4,7 +4,7 @@ import { useResumeStore } from './composables/useResumeStore'
 import ResumePreview from './components/ResumePreview.vue'
 import EditorPanel from './components/EditorPanel.vue'
 
-const { resumeData, saveToStorage } = useResumeStore()
+const { saveToStorage } = useResumeStore()
 
 const editorWidth = ref(560)
 const isDragging = ref(false)
@@ -35,11 +35,11 @@ function onDragStart(e: MouseEvent) {
 <template>
   <div class="app-layout" :class="{ dragging: isDragging }">
     <div class="editor-pane" :style="{ width: editorWidth + 'px' }">
-      <EditorPanel :data="resumeData" @save="saveToStorage" />
+      <EditorPanel @save="saveToStorage" />
     </div>
     <div class="resize-handle" @mousedown="onDragStart"></div>
     <div class="preview-pane">
-      <ResumePreview :data="resumeData" />
+      <ResumePreview />
     </div>
   </div>
 </template>
