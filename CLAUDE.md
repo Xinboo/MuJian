@@ -2,7 +2,7 @@
 
 木简 —— 在线免费制作简历。Vue3 + Vite + TypeScript，无UI库、无路由、无状态管理库。
 
-🌐 线上地址：resume.xinboo.net
+🌐 线上地址：mujian.xinboo.net
 
 ## 项目结构
 
@@ -83,7 +83,7 @@ public/
 
 - `index.html` 包含 meta description、keywords、Open Graph 标签
 - `public/robots.txt` + `public/sitemap.xml` 配置搜索引擎收录
-- canonical URL: `https://resume.xinboo.net/`
+- canonical URL: `https://mujian.xinboo.net/`
 
 ## 开发命令
 
